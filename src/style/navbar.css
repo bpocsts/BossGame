@@ -12,6 +12,10 @@
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.075);
   }
   
+.navcolor{
+  background-color:#5f59d3;
+}
+
   .input {
     width: 170px;
     height: 100%;
@@ -81,6 +85,12 @@
   justify-content: center;
   align-items: center;
 }
+.midle-section {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end; /* เลื่อนตำแหน่งไปด้านขวาสุด */
+  align-items: center; /* จัดให้อยู่ในแนวตั้งกลาง */
+}
 
 .right-section {
   flex: 1;
@@ -118,9 +128,608 @@
     color: #000000;
     }
 
+    .social-message {
+      display: flex;
+      align-items: center;
+      justify-content: center; 
+      padding-top: 1rem;
+    }
+    
+    .line {
+      height: 1px;
+      flex: 1; 
+      background-color: rgb(75, 75, 76, .5);
+      margin-bottom: 0.6rem;
+    }
+    
+    .social-message .message {
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+      color: rgb(75, 75, 76);
+      white-space: nowrap; 
+    }
+
+    .signup-container {
+      display: flex; /* จัดองค์ประกอบในแนวนอน */
+      justify-content: flex-end; /* จัดข้อความและปุ่มให้อยู่ขวาสุด */
+      align-items: center; /* จัดให้อยู่ตรงกลางในแนวตั้ง */
+      width: 100%; /* ใช้พื้นที่เต็ม */
+    }
+    
+    .signup {
+      margin: 0; /* ลบระยะห่างเพิ่มเติม */
+      margin-right: 10px; /* เพิ่มระยะห่างระหว่างข้อความและปุ่มหากจำเป็น */
+      display: flex; /* จัดองค์ประกอบในแนวนอน */
+      justify-content: flex-end; /* จัดข้อความและปุ่มให้อยู่ขวาสุด */
+      align-items: center; /* จัดให้อยู่ตรงกลางในแนวตั้ง */
+      width: 100%; /* ใช้พื้นที่เต็ม */
+    }
+
+    .form-actions {
+      display: flex; /* จัดให้ปุ่มทั้งสองอยู่ในบรรทัดเดียวกัน */
+      justify-content: space-between; /* แยกปุ่มให้อยู่ซ้ายและขวา */
+      align-items: center; /* จัดให้อยู่ตรงกลางในแนวตั้ง */
+      margin-top: 20px; /* เพิ่มระยะห่างด้านบนเพื่อความสวยงาม */
+    }
+    
+    .form-group {
+      margin-bottom: 15px; /* เพิ่มระยะห่างระหว่างฟิลด์ */
+    }
+
+    .profile-container {
+      display: flex;
+      align-items: center; /* จัดให้อยู่แนวเดียวกันในแนวตั้ง */
+      cursor: pointer; /* เปลี่ยน cursor เป็นแบบคลิกได้ */
+      position: relative;
+    }
+    
+    .profile-image {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%; /* ทำให้รูปเป็นวงกลม */
+      object-fit: cover; /* ตัดขอบรูปเพื่อให้เต็มขนาด */
+      margin-left: 10px; /* เพิ่มระยะห่างถัดจากข้อความหากต้องการ */
+    }
+
+    .dropProfile {
+      color: #000000;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
+
+
+
+
+
+
+
+
+
+
+    /* Overlay สำหรับ Card */
+/* Overlay สำหรับ Card */
+.card-profile-overlay {
+  position: fixed; /* ตำแหน่งแนบกับหน้าจอ */
+  top: 0;
+  left: 0;
+  width: 100vw; /* ขนาดเต็มหน้าจอ */
+  height: 100vh; /* ขนาดเต็มหน้าจอ */
+  background-color: rgba(0, 0, 0, 0.5); /* พื้นหลังโปร่งแสง */
+  display: flex; /* ใช้ Flexbox */
+  justify-content: center; /* จัดให้อยู่ตรงกลางแนวนอน */
+  align-items: center; /* จัดให้อยู่ตรงกลางแนวตั้ง */
+  z-index: 1000; /* ทำให้ Card อยู่ด้านบน */
+}
+
+/* Card Profile */
+.card-profile {
+  width: 273.6px; /* เดิม 228px เพิ่มขึ้น 20% */
+  height: 365.76px; /* เดิม 304.8px เพิ่มขึ้น 20% */
+  background: #3405a3;
+  border-radius: 21.6px; /* เดิม 18px เพิ่มขึ้น 20% */
+  box-shadow: 1px 6px 86.4px 0px #100a886b; /* ปรับขนาดเงา */
+  text-align: center;
+  position: relative; /* เพื่อให้จัดการภายใน Card ได้ */
+}
+
+/* Top Border ของ Card */
+.card-profile .card-border-top {
+  width: 86.4%; /* เดิม 72% เพิ่มขึ้น 20% */
+  height: 4.32%; /* เดิม 3.6% เพิ่มขึ้น 20% */
+  background: #6b64f3;
+  margin: auto;
+  border-radius: 0px 0px 21.6px 21.6px; /* ปรับขอบให้ตรงกับ Card */
+}
+
+/* ข้อความของ Username */
+.card-profile span {
+  font-weight: 600;
+  color: white;
+  text-align: center;
+  display: block;
+  padding-top: 14.4px; /* เดิม 12px เพิ่มขึ้น 20% */
+  font-size: 23.04px; /* เดิม 19.2px เพิ่มขึ้น 20% */
+}
+
+/* ข้อความ Email หรือ Job */
+.card-profile .job {
+  font-weight: 400;
+  color: white;
+  display: block;
+  text-align: center;
+  padding-top: 4.32px; /* เดิม 3.6px เพิ่มขึ้น 20% */
+  font-size: 17.28px; /* เดิม 14.4px เพิ่มขึ้น 20% */
+}
+
+/* รูปโปรไฟล์ */
+.card-profile .img-profile {
+  width: 84px; /* เดิม 70px เพิ่มขึ้น 20% */
+  height: 84px; /* เดิม 70px เพิ่มขึ้น 20% */
+  background: #6b64f3; /* สีพื้นหลัง */
+  border-radius: 50%; /* ทำให้เป็นวงกลม */
+  margin: auto;
+  margin-top: 30px; /* เดิม 25px เพิ่มขึ้น 20% */
+  overflow: hidden; /* ป้องกันไม่ให้ส่วนเกินแสดงผล */
+  display: flex; /* ใช้ Flexbox เพื่อจัดตำแหน่ง */
+  justify-content: center; /* จัดให้อยู่ตรงกลางแนวนอน */
+  align-items: center; /* จัดให้อยู่ตรงกลางแนวตั้ง */
+}
+
+/* สำหรับกรณีใส่รูปภาพจริงในโปรไฟล์ */
+.card-profile .img-profile img {
+  width: 100%; /* ให้รูปภาพเต็มพื้นที่ */
+  height: 100%; /* ให้รูปภาพเต็มพื้นที่ */
+  object-fit: cover; /* ปรับขนาดรูปให้เหมาะสมโดยไม่ผิดสัดส่วน */
+  border-radius: 50%; /* ทำให้รูปภาพเป็นวงกลม */
+}
+
+/* ปุ่ม Action */
+.card-profile .button-click {
+  padding: 11.52px 36px; /* เดิม 9.6px 30px เพิ่มขึ้น 20% */
+  display: block;
+  margin: auto;
+  border-radius: 11.52px; /* เดิม 9.6px เพิ่มขึ้น 20% */
+  border: none;
+  margin-top: 43.2px; /* เดิม 36px เพิ่มขึ้น 20% */
+  background: #6b64f3;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.card-profile .button-click:hover {
+  background: #534bf3; /* เปลี่ยนสีเมื่อ Hover */
+}
+
+/* ปุ่ม Close */
+.close-button1 {
+  position: absolute; /* วางตำแหน่งปุ่มแบบ absolute */
+  top: 3px; /* ระยะห่างจากด้านบน */
+  right: 3px; /* ระยะห่างจากด้านขวา */
+  background: none; /* ไม่มีพื้นหลัง */
+  border: none; /* ไม่มีเส้นขอบ */
+  font-size: 24px; /* ขนาดตัวอักษร */
+  font-weight: bold; /* ตัวอักษรหนา */
+  color: white; /* สีตัวอักษร */
+  cursor: pointer; /* เปลี่ยนเมาส์เป็นรูปมือ */
+}
+
+.close-button1:hover {
+  color: #ff6666; /* เปลี่ยนสีเมื่อ Hover */
+}
+
+
+
+
+/* From Uiverse.io by vinodjangid07 */
+.editBtn {
+  width: 27.5px; /* เดิม 55px ลดลง 50% */
+  height: 27.5px; /* เดิม 55px ลดลง 50% */
+  border-radius: 50%; /* เดิม 20px ลดลง 50% */
+  border: none;
+  background-color: rgb(93, 93, 116);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 2.5px 5px rgba(0, 0, 0, 0.123); /* ลดค่าความเข้มลง 50% */
+  cursor: pointer;
+  position: absolute; /* ทำให้ปุ่มสามารถเคลื่อนที่ได้อิสระ */
+  top: 28%; /* จัดในตำแหน่งกึ่งกลางแนวตั้ง */
+  left: 57%; /* จัดในตำแหน่งกึ่งกลางแนวนอน */
+  overflow: hidden;
+  transition: all 0.3s;
+}
+.editBtn::before {
+  content: "";
+  width: 100%; /* เดิม 200% ลดลง 50% */
+  height: 100%; /* เดิม 200% ลดลง 50% */
+  background-color: rgb(102, 102, 141);
+  position: absolute;
+  z-index: 1;
+  transform: scale(0);
+  transition: all 0.3s;
+  border-radius: 50%;
+  filter: blur(5px); /* ลดค่าความเบลอ 50% */
+}
+.editBtn:hover::before {
+  transform: scale(1);
+}
+.editBtn:hover {
+  box-shadow: 0px 2.5px 5px rgba(0, 0, 0, 0.336); /* ลดค่าความเข้มลง 50% */
+}
+
+.editBtn svg {
+  height: 8.5px; /* เดิม 17px ลดลง 50% */
+  fill: white;
+  z-index: 3;
+  transition: all 0.2s;
+  transform-origin: bottom;
+}
+.editBtn:hover svg {
+  transform: rotate(-15deg) translateX(2.5px); /* ค่าการแปลลดลง 50% */
+}
+.editBtn::after {
+  content: "";
+  width: 12.5px; /* เดิม 25px ลดลง 50% */
+  height: 0.75px; /* เดิม 1.5px ลดลง 50% */
+  position: absolute;
+  bottom: 9.5px; /* เดิม 19px ลดลง 50% */
+  left: -2.5px; /* เดิม -5px ลดลง 50% */
+  background-color: white;
+  border-radius: 2px;
+  z-index: 2;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s ease-out;
+}
+.editBtn:hover::after {
+  transform: scaleX(1);
+  left: 0px;
+  transform-origin: right;
+}
+
+/* From Uiverse.io by aagam147 */ 
+.button4 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 45px;
+  width: 45px;
+  border: none;
+  margin-bottom: 0px;
+  background: rgb(255, 255, 255);
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+}
+
+
+.button4 .span {
+  border-radius: 50%;
+  background-color: rgb(48, 129, 29);
+  padding: 10px;
+  position: absolute;
+  left: 0;
+}
+
+.button4:hover {
+  background: #2d1f75;
+}
+
+.svg2 {
+  color: #000000;
+}
+
+.svg2:hover {
+  color: #ffffff;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* From Uiverse.io by marcel_4026 */ 
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  height: 45px;
+  border-radius: 20px;
+  padding: 5px;
+  box-sizing: border-box;
+  background-color: #2d1f75;
+}
+
+
+
+
+.count-invite {
+  color: #2d1f75;
+  margin-top: 5px;
+}
+
+.input-text {
+  margin: 0;
+  margin-right: 10px;
+  padding-left: 10px;
+  color: #ffffff;
+  font-size: 1em;
+  font-family: 'Arial', sans-serif;
+}
+
+.input-text2 {
+  height: 30px;
+  margin: 0;
+  color: #2d1f75;
+  width: 80%; /* หรือกำหนดค่าเฉพาะ เช่น 300px */
+  max-width: 500px; /* ระบุความยาวสูงสุด */
+  padding: 10px; /* เพื่อเพิ่มพื้นที่ภายใน */
+  font-size: 16px; /* ปรับขนาดตัวอักษรเพื่อความชัดเจน */
+  box-sizing: border-box; /* เพื่อให้ padding ไม่ส่งผลต่อขนาดของ input */
+
+}
+
+.invite-code {
+  margin-top: 30px;
+}
+
+.code-invite {
+  margin-bottom: 10px;
+}
+
+.code-invite, .code-invite2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 300px; /* หรือกำหนดเป็นค่าที่เท่ากัน เช่น 300px */
+  max-width: 350px; /* ค่าที่เหมาะสม */
+  margin: 0 auto;
+}
+
+.input-wrapper {
+  display: flex;
+  gap: 10px; /* ระยะห่างระหว่าง input และปุ่ม */
+  width: 100%; /* ให้ใช้พื้นที่เท่ากัน */
+}
+
+.input-text:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #292524 inset;
+  -webkit-text-fill-color: #2d1f75;
+}
+
+.Subscribe-btn {
+  height: 100%;
+  width: 95px;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  background-color: #ffffff;
+  font-weight: 500;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.3s;
+}
+
+.Subscribe-svg {
+  color: #2d1f75;
+}
+
+.Subscribe-btn:hover {
+  font-size: 77%;
+  transition: 300ms;
+}
+
+.Subscribe-btn:active {
+  transform: scale(0.9);
+}
+
+.input-wrapper2 {
+  display: flex;
+  margin-top: 20px;
+  align-items: center;
+}
+
+.input-text2 {
+  width: 200px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-right: 10px;
+}
+
+@media (max-width: 768px) {
+  .input-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px;
+  }
+
+  .Subscribe-btn {
+    width: 100%;
+  }
+}
+
+.buttonClose2 {
+  position: absolute;
+  top: 0; /* ปรับระยะห่าง */
+  right: 0; /* ปรับระยะห่าง */
+  background: none;
+  border: 0;
+  font-size: 4rem;
+  font-weight: bold;
+  color: #2d1f75;
+  cursor: pointer;
+  z-index: 1000;
+  margin: 0;
+  padding: 0;
+}
+
+.logoInvite {
+  width: 150px;
+}
+
+.text-logo-invite {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #2d1f75;
+}
+
+.text-title-invite {
+  font-size: 1.5rem;
+  color: #2d1f75;
+}
+
+.text-title-invite2 {
+  font-size: 1.5rem;
+  color: #2d1f75;
+}
+
+.buttonClose2:hover {
+  color: #ff6666; /* เปลี่ยนสีเมื่อ Hover */
+}
+
+.Closesvg2 {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+
+.fullScreenCard {
+  position: fixed;
+  margin: 0;
+  padding: 0;
+  border-radius: 10px;
+  top: 70px;
+  bottom: 10px;
+  right: 10px;
+  width: 25%;
+  height: 600px;
+  background-color: #ffffff;
+  color: rgb(0, 0, 0);
+  z-index: 2;
+}
+
+
+
+.neon-text {
+  font-size: 3rem;
+  color: #fff;
+  text-shadow: 0 0 5px #ff005e, 0 0 10px #ff005e, 0 0 20px #ff005e, 0 0 40px #ff005e, 0 0 80px #ff005e;
+  animation: glow 1.5s infinite alternate;
+}
+
+@keyframes glow {
+  0% {
+      text-shadow: 0 0 5px #ff005e, 0 0 10px #ff005e, 0 0 20px #ff005e, 0 0 40px #ff005e, 0 0 80px #ff005e;
+  }
+  100% {
+      text-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff, 0 0 40px #00d4ff, 0 0 80px #00d4ff, 0 0 160px #00d4ff;
+  }
+}
+
+@keyframes glitch {
+  0%, 100% {
+      transform: translate(0);
+  }
+  20% {
+      transform: translate(-2px, 2px);
+  }
+  40% {
+      transform: translate(2px, -2px);
+  }
+  60% {
+      transform: translate(-1px, 1px);
+  }
+  80% {
+      transform: translate(1px, -1px);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.border-invite {
+  display: flex; /* เพิ่ม */
+  align-items: center;
+  justify-content: center;
+  width: 280px;
+  height: 40px;
+  border: 3px solid #2d1f75; /* แก้ */
+  border-radius: 10px;
+  background: #2d1f75;
+}
+
+.end-invite {
+  display: flex; /* เพิ่ม */
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #ffffff; /* แก้ */
+  border-radius: 10px;
+  background: #ffffff;
+  color: #ffffff;
+}
 
   @media (max-width: 768px) {
     .InputContainer {
       display: none;
     }
+
+    .fullScreenCard {
+      position: fixed;
+      align-items: center;
+      justify-content: center;
+      top: 70px; /* เริ่มต้นจากขอบด้านบน */
+      bottom: 10px; /* ยึดถึงขอบด้านล่าง */
+      right: 10px; /* ยึดถึงขอบด้านขวา */
+      left: 10px; /* ยึดถึงขอบด้านซ้าย */
+      width: 90%; /* กำหนดความกว้างเป็น 100% ของ viewport */
+      height: 90%; /* กำหนดความสูงเป็น 100% ของ viewport */
+      background-color: #ffffff; /* สีพื้นหลัง */
+      color: rgb(0, 0, 0); /* สีข้อความ */
+      z-index: 2; /* ลำดับของเลเยอร์ */
+      border-radius: 10px; /* เอาขอบโค้งออกเพื่อให้เต็มหน้าจอ */
+    }
+
+    
+    
   }
