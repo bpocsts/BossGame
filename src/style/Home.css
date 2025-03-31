@@ -1,12 +1,91 @@
-.background {
-    position: fixed; /* หรือ absolute ถ้าจำเป็น */
+body, html {
+  margin: 0;
+  overflow: hidden;
+  overflow-y: visible; /* ทำให้เลื่อนหน้าเว็บได้ */
+  overflow-x: hidden;
+  height: auto; /* ไม่บังคับความสูงที่จำกัด */
+  width: 100%;
+  background-color: #8966ba;
+  z-index: -1;
+}
+
+.Home {
+  display: flex;
+  flex-direction: column; /* จัดเนื้อหาแนวตั้ง */
+  align-items: center; /* จัดให้อยู่กลางในแนวนอน */
+  margin: 0 auto; /* ทำให้อยู่กลางหน้าจอ */
+  min-height: 100vh; /* ความสูงขั้นต่ำของหน้าจอ */
+  overflow-y: auto; /* รองรับการเลื่อน */
+  overflow-x: hidden;
+}
+
+
+.background-bar {
+  position: relative;
+  width: 100%;
+  height: 30px;
+}
+
+  .background2 {
+    position: absolute;
+    right: 0;
+    width: 70%;
+    height: 30px;
+    top: 0;
+    background-color: #5f59d3;
+  }
+
+  .background2-1 {
+    position: absolute;
+    width: 100%;
+    height: 10px;
+    top: 0;
+    background-color: #5f59d3;
+  }
+
+  .inverted-triangle {
+    position: absolute;
+    top: 0;
+    right: calc(70% - 35px); /* ติดด้านขวาตรงกับ .background2 */
+    width: 0;
+    height: 0;
+    border-left: 35px solid transparent; /* ขยายตามสัดส่วน */
+    border-right: 35px solid transparent; /* ขยายตามสัดส่วน */
+    border-top: 30px solid #5f59d3; /* สามเหลี่ยมคว่ำเป็นสีดำ */
+  }
+
+  .head-text {
+    position: relative;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #2d1f75;
-   
-    z-index: -1; /* เพื่อให้อยู่ด้านหลังเนื้อหาอื่น */
+    padding: 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: start;
+    color: #ffffff;
   }
+
+  
+
+  body {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+  }
+  
+
+  .carousel-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 32px;
+    padding: 0;
+    width: 100%;
+    height: 280px;
+    background-color: #484554;
+    box-shadow: -10px 0px 20px rgba(0, 0, 0), 10px 0px 20px rgba(0, 0, 0); /* เงาข้างซ้ายและขวา */
+  }
+
+  
+  

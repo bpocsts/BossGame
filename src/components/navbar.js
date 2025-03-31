@@ -117,7 +117,7 @@ function Navbarcomponent() {
 
 
   return (
-    <div>
+    <div className='navbar'>
       <Navbar expand="lg" className='navcolor' fixed="top" style={{ zIndex: 1000 }}>
         <Container className="navbar-container">
           <div className="left-section">

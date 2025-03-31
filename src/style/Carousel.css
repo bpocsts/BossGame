@@ -1,0 +1,29 @@
+.embla {
+    display: block;
+    align-items: center;
+    justify-content: center;
+    width: 900px; /* กำหนดความกว้างสูงสุดของ carousel */
+    margin: auto; /* จัดให้อยู่กลางหน้าจอ */
+    --slide-height: 260px; /* ความสูงของ slide */
+    --slide-spacing: 1rem; /* ระยะห่างระหว่าง slide */
+    --slide-size: 70%; /* ขนาดของ slide (เป็นเปอร์เซ็นต์) */
+}
+
+.embla__container {
+    display: flex; /* จัด slide ให้อยู่ในแนวนอน */
+    touch-action: pan-y pinch-zoom; /* ป้องกันการเลื่อนและซูมบนอุปกรณ์สัมผัส */
+    margin-left: calc(var(--slide-spacing) * -1); /* ปรับระยะเริ่มต้นของ container */
+}
+.embla__slide {
+    transform: translate3d(0, 0, 0); /* ปรับตำแหน่งของ slide */
+    flex: 0 0 var(--slide-size); /* กำหนดขนาดของ slide */
+    min-width: 0; /* ป้องกันการขยาย */
+    padding-left: var(--slide-spacing); /* กำหนดระยะห่างด้านซ้าย */
+}
+.embla__slide__img {
+    border-radius: 1.8rem; /* มุมโค้งของรูปภาพ */
+    display: block; /* แสดงเป็น block */
+    height: var(--slide-height); /* ความสูงของรูปภาพ */
+    width: 100%; /* ความกว้างของรูปภาพเต็มพื้นที่ */
+    object-fit: cover; /* จัดการรูปให้พอดีกับ container */
+}

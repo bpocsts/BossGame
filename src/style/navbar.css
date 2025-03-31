@@ -1,4 +1,4 @@
-/* From Uiverse.io by Shaidend */ 
+
 .InputContainer {
     height: 40px;
     display: flex;
@@ -10,10 +10,12 @@
     cursor: pointer;
     padding-left: 15px;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.075);
+    z-index: 1;
   }
   
 .navcolor{
   background-color:#5f59d3;
+  display: block;
 }
 
   .input {
