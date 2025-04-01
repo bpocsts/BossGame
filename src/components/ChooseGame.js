@@ -20,87 +20,70 @@ function ChooseGame() {
   const { userData, isLoading, user } = useUserAuth();  // ใช้ UserAuthContext แทน
   const { usageCount: inviteUsageCount } = useInvite();  // ดึง usageCount จาก InviteAuthContext
   const navigate = useNavigate();
-  const userVerify = user?.emailVerified
+  const userVerify = user?.emailVerified;
   const usageCount = user?.usageCount || 0;  // ดึงค่า usageCount จาก userData (หรือ 0 หากไม่มี)
 
-  // เพิ่มการตรวจสอบว่า user พร้อมใช้งานหรือไม่
   if (isLoading) {
-    return <div>Loading...</div>;  // ถ้ายังไม่เสร็จการโหลดข้อมูลจาก Firestore
+    return <div>Loading...</div>;  
   }
 
   const handleButtonClick = (index) => {
-    console.log(user)
-    console.log("User email verified:", userVerify); // ตรวจสอบ emailVerified
-    console.log("User usageCount:", usageCount); 
     if (!userData) {
       alert('Please log in to play');
       return;
     }
-  
+
     if (!userVerify) {
       alert('Please verify your email to play');
       return;
     }
-  
-    // ตรวจสอบการใช้งานโค้ดเชิญ (usageCount) จาก InviteAuthContext
+
     switch (index) {
       case 0:
-        if (inviteUsageCount >= 1 || usageCount >= 1) {  // ตรวจสอบจากทั้งสองแหล่ง
-          navigate('/game1');
-        } else {
-          alert('ปลดล๊อคเมื่อจำนวนโค้ดชวนเพื่อนเท่ากับ 1');
+        if (inviteUsageCount >= 1 || usageCount >= 1) {
+          navigate('/Game1');
         }
         break;
       case 1:
-        if (inviteUsageCount >= 2 || usageCount >= 2) {  // ตรวจสอบจากทั้งสองแหล่ง
-          navigate('/game2');
-        } else {
-          alert('You must reach a usage count of at least 1 to access this game.');
+        if (inviteUsageCount >= 2 || usageCount >= 2) {
+          navigate('/Game2');
         }
         break;
-      case 2:
-        navigate('/game3');
-        break;
-      case 3:
-        navigate('/game4');
-        break;
-      case 4:
-        navigate('/game5');
-        break;
-      case 5:
-        navigate('/game6');
-        break;
-      case 6:
-        navigate('/game7');
-        break;
-      case 7:
-        navigate('/game8');
-        break;
       default:
+        navigate(`/Game${index + 1}`);
         break;
     }
   };
-  
-
-  
 
   return (
     <div className="grid-container">
-      {Array.from({ length: 8 }, (_, index) => (
-        <div className="card" key={index}>
-          <div className="card-image-container">
-            <img src={images[index]} alt={`game${index + 1}`} />
+      {Array.from({ length: 8 }, (_, index) => {
+        const isUnlocked =
+          index === 0 ? inviteUsageCount >= 1 || usageCount >= 1 :
+          index === 1 ? inviteUsageCount >= 2 || usageCount >= 2 :
+          true; // เกมอื่นๆ ไม่ล็อก
+
+        return (
+          <div className="card" key={index}>
+            <div className="card-image-container">
+              <img src={images[index]} alt={`game${index + 1}`} />
+            </div>
+            <p className="card-des">{descriptions[index]}</p>
+            {isUnlocked ? (
+              <button className="card-button" onClick={() => handleButtonClick(index)}>
+                {buttons[index]}
+              </button>
+            ) : (
+              <button className="card-button locked" disabled>
+                ปลดล็อกเกม
+              </button>
+            )}
           </div>
-          <p className="card-des">
-            {descriptions[index]}
-          </p>
-          <button className="card-button" onClick={() => handleButtonClick(index)}>
-            {buttons[index]}
-          </button>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
+
 
 export default ChooseGame;
