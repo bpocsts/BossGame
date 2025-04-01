@@ -97,7 +97,8 @@ body, html {
   /* CSS for Mobile Screens */
 @media (max-width: 768px) {
   .carousel-image {
-    height: 180px;
+    height: auto;
+    width: 100%;
   }
 }
 

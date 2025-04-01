@@ -3,16 +3,14 @@ import Navbar from './navbar'
 import '../style/Home.css' // นำเข้า CSS สำหรับการจัดรูปแบบ
 import { useUserAuth } from '../context/UserAuthContext';
 import Carousel from './Carousel';
-import imgtest from '../image/imgtest.png'
-import imgtest2 from '../image/imgtest2.png'
+import imgpromote from '../image/imgpromote.png'
 import ChooseGame from './ChooseGame';
 
 const OPTIONS = { loop: true }
 const SLIDES = [
-  imgtest,
-  imgtest2,
-  imgtest,
-  imgtest2,
+  imgpromote,
+  imgpromote,
+  imgpromote,
 ];
 
 

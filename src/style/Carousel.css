@@ -5,14 +5,14 @@
     width: 900px; /* กำหนดความกว้างสูงสุดของ carousel */
     margin: auto; /* จัดให้อยู่กลางหน้าจอ */
     --slide-height: 260px; /* ความสูงของ slide */
-    --slide-spacing: 1rem; /* ระยะห่างระหว่าง slide */
+    --slide-spacing: 2rem; /* ระยะห่างระหว่าง slide */
     --slide-size: 70%; /* ขนาดของ slide (เป็นเปอร์เซ็นต์) */
 }
 
 .embla__container {
     display: flex; /* จัด slide ให้อยู่ในแนวนอน */
     touch-action: pan-y pinch-zoom; /* ป้องกันการเลื่อนและซูมบนอุปกรณ์สัมผัส */
-    margin-left: calc(var(--slide-spacing) * -1); /* ปรับระยะเริ่มต้นของ container */
+    margin-left: calc(var(--slide-spacing) * -2); /* ปรับระยะเริ่มต้นของ container */
 }
 .embla__slide {
     transform: translate3d(0, 0, 0); /* ปรับตำแหน่งของ slide */
@@ -20,24 +20,32 @@
     min-width: 0; /* ป้องกันการขยาย */
     padding-left: var(--slide-spacing); /* กำหนดระยะห่างด้านซ้าย */
 }
+
 .embla__slide__img {
-    border-radius: 1.8rem; /* มุมโค้งของรูปภาพ */
-    display: block; /* แสดงเป็น block */
-    height: var(--slide-height); /* ความสูงของรูปภาพ */
-    width: 100%; /* ความกว้างของรูปภาพเต็มพื้นที่ */
-    object-fit: cover; /* จัดการรูปให้พอดีกับ container */
+    display: block;
+    width: 700px; /* กำหนดความกว้างของรูปเป็น 700px */
+    height: 260px; /* กำหนดความสูงของรูปเป็น 260px */
+    margin-left: auto; /* ทำให้รูปอยู่ทางซ้าย */
+    margin-right: auto; /* ทำให้รูปอยู่ทางขวา */
+    object-fit: cover; /* ให้รูปครอบคลุมพื้นที่โดยไม่เสียสัดส่วน */
 }
+
+
+
 
 
 /* CSS for Mobile Screens */
 @media (max-width: 768px) {
     .embla {
         width: 100%; /* ใช้ความกว้างเต็มสำหรับจอเล็ก */
-        --slide-height: 180px; /* ปรับความสูงของ slide */
+        --slide-height: auto; /* ปรับความสูงของ slide */
         --slide-size: 100%; /* ขยายขนาด slide */
     }
 
     .embla__slide__img {
         border-radius: 0; /* ปรับมุมโค้งเล็กลง */
+        width: 100%;
+        height: auto;
+        object-fit: cover;
     }
 }

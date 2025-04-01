@@ -48,7 +48,7 @@ function ChooseGame() {
         if (inviteUsageCount >= 1 || usageCount >= 1) {  // ตรวจสอบจากทั้งสองแหล่ง
           navigate('/game1');
         } else {
-          alert('You must reach a usage count of at least 1 to access this game.');
+          alert('ปลดล๊อคเมื่อจำนวนโค้ดชวนเพื่อนเท่ากับ 1');
         }
         break;
       case 1:
