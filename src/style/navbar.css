@@ -398,8 +398,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 45px;
-  width: 45px;
+  height: 40px;
+  width: 40px;
   border: none;
   margin-bottom: 0px;
   background: rgb(255, 255, 255);
@@ -422,7 +422,7 @@
 }
 
 .svg2 {
-  color: #000000;
+  color: #5f59d3;
 }
 
 .svg2:hover {
@@ -561,6 +561,29 @@
   margin-right: 10px;
 }
 
+@media (max-width: 768px) { 
+
+  .col-md-10 {
+    font-size: 14px;
+    padding-left: 10px; /* เพิ่มระยะห่างจากขอบ */
+  }
+
+  .col-4 {
+    min-width: 60px; /* ป้องกันปุ่มหด */
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  input {
+    font-size: 14px;
+  }
+
+  .end-invite {
+    font-size: 16px;
+  }
+}
+
+
 @media (max-width: 768px) {
   .input-wrapper {
     flex-direction: column;
@@ -628,10 +651,11 @@
   bottom: 10px;
   right: 10px;
   width: 25%;
-  height: 600px;
+  height: auto; /* ให้ความสูงปรับตามเนื้อหาข้างใน */
   background-color: #ffffff;
   color: rgb(0, 0, 0);
   z-index: 2;
+  overflow-y: auto; /* เพิ่ม scroll หากเนื้อหายาวเกิน */
 }
 
 
@@ -673,6 +697,91 @@
 
 
 
+/* From Uiverse.io by Yaya12085 */ 
+.card-Verify {
+  overflow: hidden;
+  position: relative;
+  background-color: #ffffff;
+  text-align: left;
+  border-radius: 0.5rem;
+  max-width: 290px;
+}
+
+.con-verify {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-Verify {
+  padding: 1.25rem 1rem 1rem 1rem;
+  background-color: #ffffff;
+}
+
+.image-Verify {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #fee2e2;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 9999px;
+}
+
+.image-Verify svg {
+  color: #F7C752;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.content-Verify {
+  margin-top: 0.75rem;
+  text-align: center;
+}
+
+.title-Verify {
+  color: #111827;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+}
+
+.message-Verify {
+  margin-top: 0.5rem;
+  color: #6b7280;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.actions-Verify {
+  margin: 0.75rem 1rem;
+  background-color: #f9fafb;
+}
+
+.desactivate-Verify {
+  display: inline-flex;
+  padding: 0.5rem 1rem;
+  background-color: #F7C752;
+  color: #ffffff;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 500;
+  justify-content: center;
+  width: 100%;
+  border-radius: 0.375rem;
+  border-width: 1px;
+  border-color: transparent;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+
+
+button {
+  cursor: pointer;
+}
 
 
 
@@ -718,20 +827,20 @@
 
     .fullScreenCard {
       position: fixed;
-      align-items: center;
-      justify-content: center;
-      top: 70px; /* เริ่มต้นจากขอบด้านบน */
-      bottom: 10px; /* ยึดถึงขอบด้านล่าง */
-      right: 10px; /* ยึดถึงขอบด้านขวา */
-      left: 10px; /* ยึดถึงขอบด้านซ้าย */
-      width: 90%; /* กำหนดความกว้างเป็น 100% ของ viewport */
-      height: 90%; /* กำหนดความสูงเป็น 100% ของ viewport */
-      background-color: #ffffff; /* สีพื้นหลัง */
-      color: rgb(0, 0, 0); /* สีข้อความ */
-      z-index: 2; /* ลำดับของเลเยอร์ */
-      border-radius: 10px; /* เอาขอบโค้งออกเพื่อให้เต็มหน้าจอ */
-    }
-
-    
-    
+      top: 70px;
+      right: 10px;
+      left: 10px;
+      width: calc(100% - 20px);
+      max-height: calc(100vh - 80px);
+      background-color: #ffffff;
+      color: rgb(0, 0, 0);
+      z-index: 2;
+      border-radius: 10px;
+      overflow-y: auto; /* ให้มี scroll ถ้าจำเป็น */
+      display: block; /* ใช้ block layout แทน flex */
+      padding: 20px; /* เพิ่มระยะห่างขอบด้านใน */
+}
   }
+
+
+  

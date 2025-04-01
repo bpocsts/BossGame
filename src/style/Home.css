@@ -1,13 +1,13 @@
 body, html {
   margin: 0;
-  overflow: hidden;
-  overflow-y: visible; /* ทำให้เลื่อนหน้าเว็บได้ */
-  overflow-x: hidden;
-  height: auto; /* ไม่บังคับความสูงที่จำกัด */
+  padding: 0;
+  overflow-x: hidden; /* ปิดการเลื่อนแนวนอน */
+  overflow-y: auto; /* อนุญาตให้เลื่อนแนวตั้ง */
+  min-height: 100vh; /* ให้เนื้อหาสามารถสูงเกิน viewport ได้ */
   width: 100%;
   background-color: #8966ba;
-  z-index: -1;
 }
+
 
 .Home {
   display: flex;
@@ -86,6 +86,20 @@ body, html {
     background-color: #484554;
     box-shadow: -10px 0px 20px rgba(0, 0, 0), 10px 0px 20px rgba(0, 0, 0); /* เงาข้างซ้ายและขวา */
   }
+
+.ChooseGame {
+    width: 100%; /* กำหนดให้ ChooseGame ใช้ความกว้างเต็ม */
+    margin: 0; /* ลบระยะขอบ */
+    padding: 0; /* ลบ padding ถ้ามี */
+
+}
+
+  /* CSS for Mobile Screens */
+@media (max-width: 768px) {
+  .carousel-image {
+    height: 180px;
+  }
+}
 
   
   

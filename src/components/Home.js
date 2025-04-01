@@ -33,6 +33,7 @@ function Home() {
       </div>
       <div className='container'>
         <p className='head-text'>เลือกเกม</p>
+        <div className='ChooseGame'></div>
         <ChooseGame />
       </div>
     </div>

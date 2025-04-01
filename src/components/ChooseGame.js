@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext, useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import '../style/ChooseGame.css';
 import imgtest from '../image/imgtest.png';
 import imgtest2 from '../image/imgtest2.png';
+import { useUserAuth } from '../context/UserAuthContext.js';
+import { useInvite } from "../context/InviteAuthContext.js";
 
 const images = [imgtest, imgtest2, imgtest, imgtest2, imgtest, imgtest2, imgtest, imgtest2];
 const descriptions = [
@@ -15,15 +17,46 @@ const buttons = [
 ];
 
 function ChooseGame() {
+  const { userData, isLoading, user } = useUserAuth();  // ใช้ UserAuthContext แทน
+  const { usageCount: inviteUsageCount } = useInvite();  // ดึง usageCount จาก InviteAuthContext
   const navigate = useNavigate();
+  const userVerify = user?.emailVerified
+  const usageCount = user?.usageCount || 0;  // ดึงค่า usageCount จาก userData (หรือ 0 หากไม่มี)
+
+  // เพิ่มการตรวจสอบว่า user พร้อมใช้งานหรือไม่
+  if (isLoading) {
+    return <div>Loading...</div>;  // ถ้ายังไม่เสร็จการโหลดข้อมูลจาก Firestore
+  }
 
   const handleButtonClick = (index) => {
+    console.log(user)
+    console.log("User email verified:", userVerify); // ตรวจสอบ emailVerified
+    console.log("User usageCount:", usageCount); 
+    if (!userData) {
+      alert('Please log in to play');
+      return;
+    }
+  
+    if (!userVerify) {
+      alert('Please verify your email to play');
+      return;
+    }
+  
+    // ตรวจสอบการใช้งานโค้ดเชิญ (usageCount) จาก InviteAuthContext
     switch (index) {
       case 0:
-        navigate('/game1');
+        if (inviteUsageCount >= 1 || usageCount >= 1) {  // ตรวจสอบจากทั้งสองแหล่ง
+          navigate('/game1');
+        } else {
+          alert('You must reach a usage count of at least 1 to access this game.');
+        }
         break;
       case 1:
-        navigate('/game2');
+        if (inviteUsageCount >= 2 || usageCount >= 2) {  // ตรวจสอบจากทั้งสองแหล่ง
+          navigate('/game2');
+        } else {
+          alert('You must reach a usage count of at least 1 to access this game.');
+        }
         break;
       case 2:
         navigate('/game3');
@@ -47,13 +80,16 @@ function ChooseGame() {
         break;
     }
   };
+  
+
+  
 
   return (
     <div className="grid-container">
       {Array.from({ length: 8 }, (_, index) => (
         <div className="card" key={index}>
           <div className="card-image-container">
-            <img src={images[index]} alt={`game${index + 1}`}/>
+            <img src={images[index]} alt={`game${index + 1}`} />
           </div>
           <p className="card-des">
             {descriptions[index]}

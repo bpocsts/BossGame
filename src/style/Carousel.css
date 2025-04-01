@@ -27,3 +27,17 @@
     width: 100%; /* ความกว้างของรูปภาพเต็มพื้นที่ */
     object-fit: cover; /* จัดการรูปให้พอดีกับ container */
 }
+
+
+/* CSS for Mobile Screens */
+@media (max-width: 768px) {
+    .embla {
+        width: 100%; /* ใช้ความกว้างเต็มสำหรับจอเล็ก */
+        --slide-height: 180px; /* ปรับความสูงของ slide */
+        --slide-size: 100%; /* ขยายขนาด slide */
+    }
+
+    .embla__slide__img {
+        border-radius: 0; /* ปรับมุมโค้งเล็กลง */
+    }
+}

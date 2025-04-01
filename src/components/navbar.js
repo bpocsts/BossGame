@@ -8,8 +8,12 @@ import { useNavigate } from 'react-router-dom';
 import dProfile from '../image/dprofile.png';
 import Profileimg from './Profileimg'; // นำเข้า Component Profileimg
 import Invitepage from './invitepage'
+import { auth } from "../fierbase";
+import { sendEmailVerification } from 'firebase/auth';
 
 function Navbarcomponent() {
+  const [currentPage, setCurrentPage] = useState("login");
+  const [showVerificationCard, setShowVerificationCard] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const { signUp, logIn, user, logOut, userData } = useUserAuth(); // รวม signUp และ logIn ในการเรียกครั้งเดียว
   const navigate = useNavigate();
@@ -18,8 +22,18 @@ function Navbarcomponent() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isRegistering, setIsRegistering] = useState(false);
+  const [isVerifly, setisVerifly] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [photoURL, setPhotoURL] = useState(dProfile); // State สำหรับ URL รูปภาพ
+  const userVerify = user?.emailVerified
+
+   // ฟังก์ชันเปลี่ยนหน้า
+   const handleRegister = () => setCurrentPage("register");
+   const handleVerify = () => setCurrentPage("verify");
+   const handleBackToLogin = () => setCurrentPage("login");
+ 
+ 
+  
 
   useEffect(() => {
     console.log("UserData:", userData);
@@ -45,20 +59,61 @@ function Navbarcomponent() {
     }
 }
 
-  // ฟังก์ชันลงทะเบียน
-  const handleSubmitRegister = async (e) => {
+  const SubmitRegisterVerify = async (e) => {
     e.preventDefault();
-    setError(""); // รีเซ็ตข้อผิดพลาด
+    setError("");
+
+    // เปลี่ยนหน้าไปยังหน้า Verify
+    setCurrentPage("verify");
 
     try {
-      await signUp(email, password, name); // ส่ง name ไปยังฟังก์ชัน signUp
-      setShowModal(false); // ปิด modal
-      navigate("/"); // เปลี่ยนหน้าไปยังหน้าล็อกอินหลังจากลงทะเบียนสำเร็จ
+      await signUp(email, password, name);
+      const user = auth.currentUser;
+
+      if (user && !user.emailVerified) {
+        await sendEmailVerification(user);
+        console.log('Verification email sent!');
+      }
     } catch (err) {
-      setError(err.message); // แสดงข้อความข้อผิดพลาด
-      console.log(err);
+        setError(err.message);
+        console.log(err);
     }
-};
+  };
+
+  
+
+  
+  const handleSubmitVerify = async (e) => {
+    e.preventDefault(); // ป้องกันการรีเฟรชหน้า
+    setError(""); // รีเซ็ตค่าข้อผิดพลาด
+  
+    try {
+      const user = auth.currentUser; // รับข้อมูลผู้ใช้ปัจจุบัน
+      if (user) {
+        // โหลดข้อมูลผู้ใช้ใหม่ เพื่ออัปเดตสถานะล่าสุด
+        await user.reload();
+  
+        // ตรวจสอบสถานะการยืนยัน
+        if (user.emailVerified === true) {
+          setShowModal(false); // ปิด Modal หากยืนยันอีเมลแล้ว
+          console.log("Email is verified. Modal closed.");
+        } else {
+          setShowModal(true); // แสดง Modal หากยังไม่ยืนยันอีเมล
+          console.log("Email is not verified. Modal remains open.");
+        }
+      } else {
+        setError("User not found. Please log in again."); // กรณีไม่มีผู้ใช้ในระบบ
+      }
+    } catch (error) {
+      setError("An error occurred while verifying the email."); // แสดงข้อผิดพลาด
+      console.error("Verification error:", error);
+    }
+  };
+
+  
+
+
+  
   // ฟังก์ชันเข้าสู่ระบบ
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
@@ -74,18 +129,6 @@ function Navbarcomponent() {
     }
   };
 
-  // สลับระหว่าง Register กับ Login
-  const handleRegister = () => {
-    setIsRegistering(true);
-  };
-
-  const handleBackToLogin = () => {
-    setIsRegistering(false);
-  };
-
-  console.log(user);
-
-  
   const profileRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const toggleDropdown = () => {
@@ -114,8 +157,7 @@ function Navbarcomponent() {
     };
   }, []);
 
-
-
+  console.log(user)
   return (
     <div className='navbar'>
       <Navbar expand="lg" className='navcolor' fixed="top" style={{ zIndex: 1000 }}>
@@ -129,7 +171,7 @@ function Navbarcomponent() {
           <div className="right-section">
           <Invitepage />
 
-      {user ? (
+      {userVerify ? (
         <div
           ref={profileRef} // กำหนด Ref ที่ profile-container
           className="profile-container itim-regular"
@@ -172,12 +214,16 @@ function Navbarcomponent() {
                 {showProfile && (
                   <div className="card-profile-overlay">
                     <div className="card-profile">
-                      <button
-                        className="close-button1"
-                        onClick={() => setShowProfile(false)} // ปิด Card Profile
-                      >
-                        ×
-                      </button>
+                      {/* เงื่อนไขแสดงผลปุ่ม close-button1 */}
+                      {currentPage !== "verify" && (
+                        <button
+                          className="close-button1"
+                          onClick={() => setShowProfile(false)} // ฟังก์ชันปิด Card Profile
+                        >
+                          ×
+                        </button>
+                      )}
+
                       <div className="card-border-top"></div>
 
 
@@ -223,11 +269,16 @@ function Navbarcomponent() {
       {/* Modal */}
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
-          <Modal.Title className='itim-regular' style={{ fontWeight: "bold" }}
-          >{isRegistering ? "Register" : "Login"}</Modal.Title>
-        </Modal.Header>
+        <Modal.Title className="itim-regular" style={{ fontWeight: "bold" }}>
+          {currentPage === "login"
+            ? "Login"
+            : currentPage === "register"
+            ? "Register"
+            : "Verify"}
+        </Modal.Title>
+        </Modal.Header >
         <Modal.Body>
-          {!isRegistering ? (
+        {currentPage === "login" && (
             <>
               {/* Card Login */}
               <form onSubmit={handleLoginSubmit}>
@@ -258,7 +309,6 @@ function Navbarcomponent() {
                   <span className='itim-regular'>Login</span>
                 </Button>
               </form>
-              {
               <p className="signup itim-regular">
                 Don't have an account? <span className='m-1'></span>{"  "}
                 <a
@@ -270,12 +320,16 @@ function Navbarcomponent() {
                   Sign up
                 </a>
               </p>
-          }
             </>
-          ) : (
+          )}
+
+          {currentPage === "register" && (
             <>
               {/* Card Register */}
-              <form onSubmit={handleSubmitRegister}>
+              <form 
+              // onSubmit={handleSubmitRegister }
+              onSubmit= {SubmitRegisterVerify}
+              >
                 <div className="form-group itim-regular">
                   <label htmlFor="name">Name</label>
                   <input
@@ -314,11 +368,82 @@ function Navbarcomponent() {
                   <Button variant="secondary" onClick={handleBackToLogin}>
                     <span className="itim-regular">Back to Login</span>
                   </Button>
+                  
                   <Button variant="primary" type="submit">
                     <span className="itim-regular">Register</span>
                   </Button>
                 </div>
               </form>
+            </>
+          )}
+          {currentPage === "verify" && (
+            <>
+              {/* Card verify */}
+              <div className='con-verify'
+                // onSubmit={handleSubmitVerify}
+               >
+              <div class="card-Verify">
+                <div class="header-Verify">
+                  <div class="image-Verify">
+                    <svg
+                      aria-hidden="true"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <path
+                        d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+                        stroke-linejoin="round"
+                        stroke-linecap="round"
+                      ></path>
+                    </svg>
+                  </div>
+                  <div class="content-Verify">
+                    <span class="title-Verify">กรุณากรุณายืนยันอีเมลของคุณ</span>
+                    <p class="message-Verify">
+                      โปรดตรวจสอบอีเมลของคุณและคลิกลิงก์เพื่อยืนยัน
+                    </p>
+                  </div>
+                  <div class="actions-Verify">
+                    
+                  </div>
+                </div>
+                <Button className='desactivate-Verify' type="submit" onClick={handleSubmitVerify}>
+                  <span className="itim-regular">Verify</span>
+                </Button>
+              </div>
+
+
+
+
+
+
+
+
+
+
+                {/* <div className="form-group itim-regular">
+                  <div className='container'>
+                  <div className='row'>
+                    <div className='col-2 center-svg'>
+                        <p>กรุณากรุณายืนยันอีเมลของคุณ</p>
+                        <svg fill="none" height="48" viewBox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg">
+                          <path d="m13 14h-2v-5h2zm0 4h-2v-2h2zm-12 3h22l-11-19z" fill="#393a37"></path>
+                          <p>โปรดตรวจสอบอีเมลของคุณและคลิกลิงก์เพื่อยืนยัน</p>
+                        </svg>
+                    </div>
+                    <div className='col-10'>
+                      
+                      
+                    </div>
+                  </div>
+                  </div>
+                </div>
+                <Button variant="primary" type="submit" onClick={handleSubmitVerify}>
+                  <span className="itim-regular">Verify</span>
+                </Button> */}
+              </div>
             </>
           )}
         </Modal.Body>

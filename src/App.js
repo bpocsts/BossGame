@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginPage from './components/login';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { UserAuthContextProvider } from './context/UserAuthContext';
+import { InviteProvider } from './context/InviteAuthContext.js';
 import Invitepage from './components/invitepage'
 
 const clientId = "1083350032653-pr81lhb6pd24jpl0672ga0gc91ah1ppi.apps.googleusercontent.com";
@@ -14,6 +15,7 @@ function App() {
       {/* Wrap the app with both GoogleOAuthProvider and UserAuthContextProvider */}
       <GoogleOAuthProvider clientId={clientId}>
         <UserAuthContextProvider>
+        <InviteProvider>
           <Router>
             <Routes>
             <Route path="/invite" element={<Invitepage />} />
@@ -21,6 +23,7 @@ function App() {
               <Route path="/login" element={<LoginPage />} />
             </Routes>
           </Router>
+        </InviteProvider>
         </UserAuthContextProvider>
       </GoogleOAuthProvider>
     </div>

@@ -1,14 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../style/navbar.css";
+import { collection, query, where, getDocs, updateDoc, doc, addDoc, getDoc, setDoc, increment } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
+import { auth } from "../fierbase";
 import logo from '../image/logomain.png';
-import { useInvite } from "../context/InviteAuthContext.js";
-
 
 function InvitePage() {
-  const [isCardVisible, setIsCardVisible] = useState(false);
-  const { userInput, setUserInput, inviteCode, usageCount, generateInviteCode,checkInviteCode, getInviteUsage, errorMessage, isLoading } = useInvite();
+  const [inviteCode, setInviteCode] = useState(""); // สถานะเก็บโค้ดเชิญ
+  const [isLoading, setIsLoading] = useState(true); // สถานะกำลังโหลด
+  const [errorMessage, setErrorMessage] = useState(""); // ข้อผิดพลาด
+  const db = getFirestore(); // Firestore instance
+  const [userInput, setUserInput] = useState(""); // ข้อมูลที่ผู้ใช้กรอก
+  const [message, setMessage] = useState(""); // ข้อความสถานะ
+  const [usageCount, setUsageCount] = useState(0); // จำนวนการใช้งานโค้ดเชิญ
   const maxCount = 5;
   const percentage = Math.min((usageCount / maxCount) * 100, 100);
+
+  const [isCardVisible, setIsCardVisible] = useState(false);
 
   const toggleCard = () => {
     setIsCardVisible(!isCardVisible);
@@ -19,8 +27,111 @@ function InvitePage() {
   };
 
 
-  
+  // สร้างโค้ดเชิญใหม่หรือใช้โค้ดที่มีอยู่
+  const generateInviteCode = async () => {
+    if (!auth.currentUser) {
+      console.error("ผู้ใช้ยังไม่ได้ล็อกอิน");
+      setErrorMessage("กรุณาเข้าสู่ระบบก่อนสร้างโค้ดเชิญ");
+      setIsLoading(false);
+      return;
+    }
 
+    try {
+      const refCode = auth.currentUser.uid; // ใช้ UID เป็นโค้ดเชิญ
+      const existingInvitesQuery = query(
+        collection(db, "invites"),
+        where("userId", "==", refCode)
+      );
+
+      const existingInvitesSnapshot = await getDocs(existingInvitesQuery);
+
+      // ตรวจสอบว่าผู้ใช้มีโค้ดอยู่แล้วหรือไม่
+      if (!existingInvitesSnapshot.empty) {
+        const existingInvite = existingInvitesSnapshot.docs[0].data();
+        setInviteCode(refCode); // ใช้โค้ดเดิม
+      } else {
+        // สร้างโค้ดใหม่
+        await addDoc(collection(db, "invites"), {
+          userId: refCode,
+          inviteCode: refCode,
+          createdAt: new Date(),
+          usageCount: 0, // เริ่มต้นจำนวนการใช้งานที่ 0
+          usedBy: [], // รายชื่อผู้ใช้ที่ใช้โค้ด
+        });
+        setInviteCode(refCode); // เก็บโค้ดใน State
+      }
+    } catch (error) {
+      console.error("เกิดข้อผิดพลาดในการสร้างโค้ด:", error.message);
+      setErrorMessage("ไม่สามารถสร้างโค้ดเชิญได้");
+    } finally {
+      setIsLoading(false); // ยกเลิกสถานะโหลด
+    }
+  };
+
+  // ดึงจำนวนการใช้งานโค้ดเชิญจาก Firestore
+  const getInviteUsage = async () => {
+    try {
+      const invitesQuery = query(
+        collection(db, "invites"),
+        where("inviteCode", "==", inviteCode)
+      );
+      const invitesSnapshot = await getDocs(invitesQuery);
+
+      if (!invitesSnapshot.empty) {
+        const inviteData = invitesSnapshot.docs[0].data();
+        setUsageCount(inviteData.usageCount || 0); // ตั้งค่า usageCount
+      }
+    } catch (error) {
+      console.error("เกิดข้อผิดพลาดในการดึงข้อมูล:", error.message);
+    }
+  };
+
+  // ตรวจสอบโค้ดเชิญ
+  const checkInviteCode = async () => {
+    setIsLoading(true);
+    try {
+      const invitesQuery = query(
+        collection(db, "invites"),
+        where("inviteCode", "==", userInput)
+      );
+      const invitesSnapshot = await getDocs(invitesQuery);
+
+      if (!invitesSnapshot.empty) {
+        const inviteDoc = invitesSnapshot.docs[0];
+        const inviteData = inviteDoc.data();
+
+        // อัปเดต Firestore: เพิ่มจำนวนการใช้งาน
+        await updateDoc(inviteDoc.ref, {
+          usageCount: (inviteData.usageCount || 0) + 1,
+          usedBy: [...(inviteData.usedBy || []), auth.currentUser.uid],
+        });
+
+        setMessage("โค้ดเชิญถูกต้อง!");
+        setUserInput(""); // ล้าง input
+      } else {
+        setMessage("โค้ดเชิญไม่ถูกต้อง!");
+      }
+
+      // ล้างข้อความหลัง 5 วินาที
+      setTimeout(() => setMessage(""), 5000);
+    } catch (error) {
+      console.error("เกิดข้อผิดพลาดในการตรวจสอบโค้ด:", error.message);
+      setMessage("เกิดข้อผิดพลาดในการตรวจสอบโค้ด");
+      setTimeout(() => setMessage(""), 5000);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    generateInviteCode(); // สร้างโค้ดเมื่อโหลดครั้งแรก
+  }, []);
+
+  useEffect(() => {
+    if (inviteCode) {
+      getInviteUsage(); // ดึงข้อมูลการใช้งานเมื่อมีโค้ด
+    }
+  }, [inviteCode]);
 
   
 
@@ -28,7 +139,6 @@ function InvitePage() {
     navigator.clipboard.writeText(inviteCode);
   };
 
-  console.log("Current usageCount:", usageCount);
 
   return (
     <>
@@ -255,12 +365,7 @@ function InvitePage() {
                   </div>
                   
                   <div class="col-4 col-md-2" style={{marginRight: "5px"}}>
-                    <button 
-                    onClick={() => { 
-                      console.log("Input:", userInput); 
-                      checkInviteCode(userInput); 
-                    }}
-                    className="end-invite">
+                    <button onClick={checkInviteCode} className="end-invite">
                       <svg class="Subscribe-svg w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                         <path fill-rule="evenodd" d="M20.337 3.664c.213.212.354.486.404.782.294 1.711.657 5.195-.906 6.76-1.77 1.768-8.485 5.517-10.611 6.683a.987.987 0 0 1-1.176-.173l-.882-.88-.877-.884a.988.988 0 0 1-.173-1.177c1.165-2.126 4.913-8.841 6.682-10.611 1.562-1.563 5.046-1.198 6.757-.904.296.05.57.191.782.404ZM5.407 7.576l4-.341-2.69 4.48-2.857-.334a.996.996 0 0 1-.565-1.694l2.112-2.111Zm11.357 7.02-.34 4-2.111 2.113a.996.996 0 0 1-1.69-.565l-.422-2.807 4.563-2.74Zm.84-6.21a1.99 1.99 0 1 1-3.98 0 1.99 1.99 0 0 1 3.98 0Z" clip-rule="evenodd"/>
                       </svg>
